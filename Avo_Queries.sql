@@ -5,7 +5,7 @@ GROUP BY 1
 ORDER BY 2 DESC;
 
 -- Check which year had the highest prices
-SELECT DISTINCT year, avg(AveragePrice) AS 'Average Price' from avocado
+SELECT DISTINCT year, avg(AveragePrice) AS 'Average Price ($)' from avocado
 GROUP BY 1
 ORDER BY 2 DESC;
 
@@ -33,9 +33,9 @@ WITH
 		WHERE type = 'conventional'
 		GROUP BY 1)
 SELECT org_price.region, 
-	org_price.AvgPrice_Org, 
-	conv_price.AvgPrice_Conv, 
-	(org_price.AvgPrice_Org -  conv_price.AvgPrice_Conv) AS DiffBtwOrgConv 
+	org_price.AvgPrice_Org AS 'Average Organic Price', 
+	conv_price.AvgPrice_Conv AS 'Average Convential Price', 
+	(org_price.AvgPrice_Org -  conv_price.AvgPrice_Conv) AS 'Difference Between Organic and Conventional Price'
 	from org_price
 JOIN conv_price ON org_price.region = conv_price.region
 ORDER BY 4 DESC
@@ -43,7 +43,9 @@ ORDER BY 4 DESC
 
 
 -- Check volume per region to see if there's areas with much greater avocado usage
-SELECT region, TotalVolume, AveragePrice FROM avocado
+--First pass through and you find TotalUS is a large outlier, so I removed it from the table for the query
+DELETE FROM avocado WHERE region = 'TotalUS';
+SELECT region, avg(TotalVolume) AS 'Total Volume', AveragePrice AS 'Average Price' FROM avocado
 GROUP BY 1
 ORDER BY 2 DESC
 ;
