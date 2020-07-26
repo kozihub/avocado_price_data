@@ -40,3 +40,10 @@ SELECT org_price.region,
 JOIN conv_price ON org_price.region = conv_price.region
 ORDER BY 4 DESC
 ;
+
+
+-- Check volume per region to see if there's areas with much greater avocado usage
+SELECT region, TotalVolume, AveragePrice FROM avocado
+GROUP BY 1
+ORDER BY 2 DESC
+;
